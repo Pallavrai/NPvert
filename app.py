@@ -8,6 +8,7 @@ import os
 import tempfile
 import subprocess
 import json
+import hashlib
 from pathlib import Path
 
 from parser import LaTeXParser, LaTeXASTNode
@@ -40,6 +41,12 @@ if 'output_latex' not in st.session_state:
     st.session_state.output_latex = ""
 if 'pdf_path' not in st.session_state:
     st.session_state.pdf_path = None
+
+# Widget state keys for text areas (required for programmatic updates in Streamlit >= 1.30)
+if 'template_editor' not in st.session_state:
+    st.session_state.template_editor = st.session_state.template_latex
+if 'input_editor' not in st.session_state:
+    st.session_state.input_editor = st.session_state.input_content
 
 
 def init_placer():
@@ -386,8 +393,9 @@ with st.sidebar:
             "Letter": "letter"
         }
         if st.button("Load Template"):
-            st.session_state.template_latex = load_template(template_map[template_option])
+            st.session_state.template_editor = load_template(template_map[template_option])
             st.success(f"Loaded {template_option} template!")
+            st.rerun()
     
     st.markdown("---")
     
@@ -404,8 +412,9 @@ with st.sidebar:
             "Personal Profile": "personal_profile"
         }
         if st.button("Load Sample"):
-            st.session_state.input_content = load_sample(sample_map[sample_option])
+            st.session_state.input_editor = load_sample(sample_map[sample_option])
             st.success(f"Loaded {sample_option} sample!")
+            st.rerun()
     
     st.markdown("---")
     st.markdown("### About")
@@ -430,25 +439,30 @@ with tab1:
         template_file = st.file_uploader("Upload Template (.tex or .docx)", type=['tex', 'docx'], key="template_upload")
         
         if template_file is not None:
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.' + template_file.name.split('.')[-1]) as tmp:
-                tmp.write(template_file.getvalue())
-                tmp_path = tmp.name
-            
-            if is_docx(tmp_path):
-                converter = DOCXConverter()
-                st.session_state.template_latex = converter.convert(tmp_path)
-            else:
-                st.session_state.template_latex = template_file.getvalue().decode('utf-8')
-            
-            os.unlink(tmp_path)
+            file_bytes = template_file.getvalue()
+            file_id = hashlib.md5(file_bytes).hexdigest()
+            if st.session_state.get("_template_file_id") != file_id:
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.' + template_file.name.split('.')[-1]) as tmp:
+                    tmp.write(file_bytes)
+                    tmp_path = tmp.name
+                
+                if is_docx(tmp_path):
+                    converter = DOCXConverter()
+                    st.session_state.template_editor = converter.convert(tmp_path)
+                else:
+                    with open(tmp_path, 'r', encoding='utf-8') as f:
+                        st.session_state.template_editor = f.read()
+                
+                os.unlink(tmp_path)
+                st.session_state._template_file_id = file_id
+                st.rerun()
         
-        template_text = st.text_area(
+        st.text_area(
             "Template LaTeX:",
-            value=st.session_state.template_latex,
             height=400,
             key="template_editor"
         )
-        st.session_state.template_latex = template_text
+        st.session_state.template_latex = st.session_state.template_editor
     
     with col2:
         st.subheader("Input Content")
@@ -457,20 +471,24 @@ with tab1:
         input_file = st.file_uploader("Upload Input (.txt, .tex, .docx)", type=['txt', 'tex', 'docx'], key="input_upload")
         
         if input_file is not None:
-            with tempfile.NamedTemporaryFile(delete=False, suffix='.' + input_file.name.split('.')[-1]) as tmp:
-                tmp.write(input_file.getvalue())
-                tmp_path = tmp.name
-            
-            st.session_state.input_content = read_input_file(tmp_path)
-            os.unlink(tmp_path)
+            file_bytes = input_file.getvalue()
+            file_id = hashlib.md5(file_bytes).hexdigest()
+            if st.session_state.get("_input_file_id") != file_id:
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.' + input_file.name.split('.')[-1]) as tmp:
+                    tmp.write(file_bytes)
+                    tmp_path = tmp.name
+                
+                st.session_state.input_editor = read_input_file(tmp_path)
+                os.unlink(tmp_path)
+                st.session_state._input_file_id = file_id
+                st.rerun()
         
-        input_text = st.text_area(
+        st.text_area(
             "Input Content:",
-            value=st.session_state.input_content,
             height=400,
             key="input_editor"
         )
-        st.session_state.input_content = input_text
+        st.session_state.input_content = st.session_state.input_editor
 
 # Tab 2: Structure Graph
 with tab2:
@@ -626,7 +644,7 @@ with tab4:
                     from pdf2image import convert_from_path
                     images = convert_from_path(st.session_state.pdf_path, first_page=1, last_page=1)
                     if images:
-                        st.image(images[0], caption="Page 1", use_column_width=True)
+                        st.image(images[0], caption="Page 1", use_container_width=True)
                 except Exception as e:
                     st.info("PDF preview not available. Please download the PDF.")
             

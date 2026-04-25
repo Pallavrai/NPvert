@@ -3,7 +3,7 @@ NPvert LLM Semantic Placer
 Uses Gemini Pro for semantic anchoring and content placement.
 """
 
-import google.generativeai as genai
+from google import genai
 import json
 import re
 from typing import Dict, List, Any, Optional, Tuple
@@ -14,8 +14,8 @@ class SemanticPlacer:
     """LLM-based semantic content placer for NPvert."""
     
     def __init__(self, api_key: str):
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-pro')
+        self.client = genai.Client(api_key=api_key)
+        self.model = "gemini-2.0-flash"
         
     def analyze_content(self, input_text: str) -> Dict[str, Any]:
         """Analyze input content and extract semantic blocks."""
@@ -42,7 +42,7 @@ Return ONLY a JSON object with this structure:
 }}
 """
         try:
-            response = self.model.generate_content(prompt)
+            response = self.client.models.generate_content(model=self.model, contents=prompt)
             text = response.text
             # Extract JSON from markdown code blocks if present
             json_match = re.search(r'```json\s*(.*?)\s*```', text, re.DOTALL)
@@ -156,7 +156,7 @@ Ensure the output is valid LaTeX syntax.
 """
         
         try:
-            response = self.model.generate_content(prompt)
+            response = self.client.models.generate_content(model=self.model, contents=prompt)
             latex_content = response.text.strip()
             
             # Clean up markdown code blocks

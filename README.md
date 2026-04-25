@@ -49,6 +49,11 @@ brew install --cask basictex  # macOS
 brew install pandoc  # macOS
 ```
 
+### Requirements
+- Python 3.10+
+- Streamlit 1.44+
+- Google Gemini API key (set via `GEMINI_API_KEY` environment variable)
+
 ## Usage
 
 ### Run the Streamlit Application
