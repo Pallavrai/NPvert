@@ -1,0 +1,37 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{xcolor}
+
+\definecolor{headerblue}{RGB}{0,51,102}
+\titleformat{\section}{\large\bfseries\color{headerblue}}{}{0em}{}[\titlerule]
+\titlespacing*{\section}{0pt}{12pt}{6pt}
+
+\begin{document}
+\begin{center}
+{\LARGE \textbf{
+% SLOT: NAME
+}}\\[6pt]
+% SLOT: CONTACT_INFO
+\end{center}
+
+\section{Summary}
+% SLOT: SUMMARY
+
+\section{Experience}
+% SLOT: EXPERIENCE
+
+\section{Education}
+% SLOT: EDUCATION
+
+\section{Skills}
+% SLOT: SKILLS
+
+\section{Projects}
+% SLOT: PROJECTS
+
+\section{Certifications}
+% SLOT: CERTIFICATIONS
+
+\end{document}

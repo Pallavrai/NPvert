@@ -1,0 +1,45 @@
+Name: Sarah Johnson
+Email: sarah.johnson@email.com | Phone: (555) 123-4567 | LinkedIn: linkedin.com/in/sarahjohnson
+Location: San Francisco, CA
+
+Summary: Results-driven software engineer with 8 years of experience building scalable web applications and distributed systems. Passionate about clean code, system design, and mentoring junior developers. Proven track record of leading cross-functional teams to deliver high-impact products on time.
+
+Experience:
+
+Senior Software Engineer at TechCorp (2021 - Present)
+- Led migration of monolithic application to microservices architecture, improving scalability by 300%
+- Designed and implemented real-time data pipeline processing 2M+ events daily using Kafka and Flink
+- Mentored team of 5 junior engineers through code reviews and pair programming
+- Reduced API response times by 45% through query optimization and caching strategies
+
+Software Engineer at StartupXYZ (2018 - 2021)
+- Built core payment processing system handling $10M+ monthly transactions
+- Implemented CI/CD pipeline reducing deployment time from 4 hours to 20 minutes
+- Developed mobile-responsive React frontend used by 500K+ monthly active users
+- Contributed to open-source projects with 2,000+ GitHub stars combined
+
+Junior Developer at WebSolutions (2016 - 2018)
+- Maintained e-commerce platform serving 100K+ customers
+- Implemented automated testing suite achieving 85% code coverage
+- Collaborated with UX team to redesign checkout flow, increasing conversion by 12%
+
+Education:
+- Master of Science in Computer Science, Stanford University (2016)
+- Bachelor of Science in Computer Engineering, UC Berkeley (2014)
+
+Skills:
+- Languages: Python, JavaScript, TypeScript, Go, Java, SQL
+- Frameworks: React, Node.js, Django, Flask, Spring Boot
+- Cloud: AWS, GCP, Docker, Kubernetes, Terraform
+- Databases: PostgreSQL, MongoDB, Redis, Elasticsearch
+- Tools: Git, Jenkins, Grafana, Prometheus, Kafka
+
+Projects:
+- Open-source distributed task queue (Python/Redis) - 3,200 GitHub stars
+- Real-time collaborative code editor (WebSockets/React) - Featured on Hacker News
+- Machine learning model serving platform (TensorFlow/Flask) - Internal company tool adopted by 12 teams
+
+Certifications:
+- AWS Certified Solutions Architect - Professional
+- Google Cloud Professional Data Engineer
+- Certified Kubernetes Administrator (CKA)

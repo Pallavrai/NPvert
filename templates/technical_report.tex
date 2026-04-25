@@ -1,0 +1,58 @@
+\documentclass[12pt,a4paper]{report}
+\usepackage[utf8]{inputenc}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{Technical Report}
+\lhead{
+% SLOT: REPORT_TITLE
+}
+\cfoot{\thepage}
+
+\title{
+% SLOT: REPORT_TITLE
+}
+\author{
+% SLOT: AUTHOR
+}
+\date{
+% SLOT: DATE
+}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+% SLOT: EXECUTIVE_SUMMARY
+\end{abstract}
+
+\tableofcontents
+\newpage
+
+\chapter{Introduction}
+% SLOT: INTRO
+
+\chapter{System Overview}
+% SLOT: SYSTEM_OVERVIEW
+
+\chapter{Implementation Details}
+% SLOT: IMPLEMENTATION
+
+\chapter{Testing and Validation}
+% SLOT: TESTING
+
+\chapter{Conclusion and Recommendations}
+% SLOT: CONCLUSION
+
+\appendix
+\chapter{Appendix A: Additional Data}
+% SLOT: APPENDIX
+
+\end{document}
