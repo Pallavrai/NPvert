@@ -1,5 +1,1 @@
-# System dependencies for Streamlit Cloud
-# Required by pdf2image for PDF preview
 poppler-utils
-# Required if using pypandoc (currently unused)
-# pandoc
