@@ -411,6 +411,8 @@ with st.sidebar:
         }
         if st.button("Load Template"):
             st.session_state.template_latex = load_template(template_map[template_option])
+            # Clear widget state so text_area picks up the new value
+            st.session_state.pop("template_editor", None)
             st.success(f"Loaded {template_option} template!")
     
     st.markdown("---")
@@ -429,6 +431,8 @@ with st.sidebar:
         }
         if st.button("Load Sample"):
             st.session_state.input_content = load_sample(sample_map[sample_option])
+            # Clear widget state so text_area picks up the new value
+            st.session_state.pop("input_editor", None)
             st.success(f"Loaded {sample_option} sample!")
     
     st.markdown("---")
@@ -465,6 +469,8 @@ with tab1:
                 st.session_state.template_latex = template_file.getvalue().decode('utf-8')
             
             os.unlink(tmp_path)
+            # Clear widget state so text_area picks up the new value
+            st.session_state.pop("template_editor", None)
         
         template_text = st.text_area(
             "Template LaTeX:",
@@ -487,6 +493,8 @@ with tab1:
             
             st.session_state.input_content = read_input_file(tmp_path)
             os.unlink(tmp_path)
+            # Clear widget state so text_area picks up the new value
+            st.session_state.pop("input_editor", None)
         
         input_text = st.text_area(
             "Input Content:",
