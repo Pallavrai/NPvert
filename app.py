@@ -40,11 +40,35 @@ if 'output_latex' not in st.session_state:
     st.session_state.output_latex = ""
 if 'pdf_path' not in st.session_state:
     st.session_state.pdf_path = None
+if 'unfilled_slots' not in st.session_state:
+    st.session_state.unfilled_slots = []
+
+
+def get_api_key() -> str:
+    """Get Gemini API key from environment or Streamlit secrets."""
+    # Try .env file first (local development)
+    api_key = os.getenv("GEMINI_API_KEY")
+    if api_key:
+        return api_key
+    # Try Streamlit secrets (Streamlit Cloud deployment)
+    try:
+        api_key = st.secrets.get("GEMINI_API_KEY")
+        if api_key:
+            return api_key
+    except Exception:
+        pass
+    return None
 
 
 def init_placer():
     """Initialize the semantic placer."""
-    return SemanticPlacer(GEMINI_API_KEY)
+    api_key = get_api_key()
+    if not api_key:
+        raise ValueError(
+            "Gemini API key not found. Set GEMINI_API_KEY in .env file (local) "
+            "or Streamlit secrets (cloud deployment)."
+        )
+    return SemanticPlacer(api_key)
 
 
 @st.cache_data

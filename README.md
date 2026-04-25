@@ -27,7 +27,12 @@ LaTeX Template + Incoming Content → AST Parser → Structure Graph (DAG)
                                        Verified PDF Output
 ```
 
-## Installation
+## Requirements
+
+- Python 3.10 - 3.12+ (tested on 3.12)
+- Google Gemini API key
+
+## Local Installation
 
 ```bash
 # Install Python dependencies
@@ -49,9 +54,17 @@ brew install --cask basictex  # macOS
 brew install pandoc  # macOS
 ```
 
-## Usage
+## Local Usage
 
-### Run the Streamlit Application
+### 1. Set up your API key
+
+Create a `.env` file in the project root:
+
+```bash
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+### 2. Run the Streamlit Application
 
 ```bash
 streamlit run app.py
@@ -63,7 +76,34 @@ Or if streamlit is not on your PATH:
 python3 -m streamlit run app.py
 ```
 
-### Workflow
+## Deploy to Streamlit Cloud
+
+### 1. Prepare your repository
+
+Ensure these files are committed to your GitHub repo:
+- `requirements.txt`
+- `runtime.txt` (specifies Python 3.12)
+- `packages.txt` (system dependencies)
+- `.streamlit/config.toml`
+- All app code and assets
+
+### 2. Set up Streamlit Secrets
+
+In your Streamlit Cloud dashboard, go to **Settings → Secrets** and add:
+
+```toml
+GEMINI_API_KEY = "your_gemini_api_key_here"
+```
+
+### 3. Deploy
+
+1. Connect your GitHub repo at [share.streamlit.io](https://share.streamlit.io)
+2. Select the repository and branch
+3. Click **Deploy**
+
+The `runtime.txt` file tells Streamlit Cloud to use Python 3.12, and `packages.txt` installs `poppler-utils` for PDF preview support.
+
+## Workflow
 
 1. **Input Tab**: 
    - Upload or paste a LaTeX template with `% SLOT: SLOT_NAME` markers
@@ -84,7 +124,7 @@ python3 -m streamlit run app.py
 4. **Output Tab**:
    - Review generated LaTeX
    - Download `.tex` file
-   - Compile to PDF (requires LaTeX distribution)
+   - Compile to PDF (requires LaTeX distribution — not available on Streamlit Cloud free tier)
    - Download PDF
 
 ### Template Slot Syntax
@@ -107,9 +147,13 @@ NPvert/
 ├── app.py                 # Streamlit application
 ├── parser.py              # LaTeX AST parser
 ├── graph_builder.py       # Structure Graph (DAG) builder
-├── llm_placer.py          # Gemini Pro semantic placer
+├── llm_placer.py          # Gemini semantic placer
 ├── docx_converter.py      # DOCX to LaTeX converter
 ├── requirements.txt       # Python dependencies
+├── runtime.txt            # Streamlit Cloud Python version
+├── packages.txt           # Streamlit Cloud system deps
+├── .streamlit/
+│   └── config.toml        # Streamlit configuration
 ├── templates/             # Preformatted LaTeX templates
 │   ├── research_paper.tex
 │   ├── technical_report.tex
@@ -138,19 +182,17 @@ Content is embedded and compared against semantic anchors associated with Struct
 ### Graph-Based Validation
 All candidate placements undergo validation to ensure compliance with structural constraints, including environment legality and hierarchical consistency.
 
-## API Key
+## API Key Setup
 
-The application uses Google Gemini Pro for semantic analysis. The API key is embedded in `app.py` for demonstration. For production use, consider using environment variables:
+The application uses Google Gemini for semantic analysis. You can provide the API key in two ways:
 
-```python
-import os
-GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "your-key-here")
-```
+1. **Local development**: Create a `.env` file with `GEMINI_API_KEY=your_key`
+2. **Streamlit Cloud**: Add `GEMINI_API_KEY` to your app secrets in the Streamlit dashboard
 
 ## Limitations
 
-- PDF compilation requires a LaTeX distribution (TeX Live, MiKTeX, or MacTeX)
-- Gemini Pro API has rate limits
+- PDF compilation requires a LaTeX distribution (TeX Live, MiKTeX, or MacTeX) — not available on Streamlit Cloud free tier
+- Gemini API has rate limits
 - Complex custom LaTeX macros may require manual adjustment
 - DOCX conversion handles basic formatting; complex layouts may need cleanup
 

@@ -15,7 +15,7 @@ class SemanticPlacer:
     
     def __init__(self, api_key: str):
         genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel('gemini-pro')
+        self.model = genai.GenerativeModel('gemini-1.5-flash')
         
     def analyze_content(self, input_text: str) -> Dict[str, Any]:
         """Analyze input content and extract semantic blocks."""

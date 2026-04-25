@@ -48,7 +48,7 @@ class StructureGraph:
         
     def _generate_id(self, prefix: str = "node") -> str:
         self._counter += 1
-        return f"{prefix}_{self._counter}_{hashlib.md5(str(self._counter).encode()).hexdigest()[:6]}"
+        return f"{prefix}_{self._counter}_{hashlib.sha256(str(self._counter).encode()).hexdigest()[:6]}"
     
     def build_from_ast(self, ast_root: LaTeXASTNode) -> 'StructureGraph':
         """Build Structure Graph from LaTeX AST."""
